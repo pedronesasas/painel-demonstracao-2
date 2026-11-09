@@ -1,0 +1,540 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-glow: var(--primary-glow);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-nurture: var(--nurture);
+  --color-nurture-foreground: var(--nurture-foreground);
+  --color-sale: var(--sale);
+  --color-sale-foreground: var(--sale-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-lane: var(--lane);
+  --color-card-hover: var(--card-hover);
+  --color-subtle-foreground: var(--subtle-foreground);
+  --color-border-strong: var(--border-strong);
+  --color-primary-strong: var(--primary-strong);
+  --color-destructive-strong: var(--destructive-strong);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-priority-medium: var(--priority-medium);
+  --color-priority-low: var(--priority-low);
+  --color-avatar-1: var(--avatar-1);
+  --color-avatar-2: var(--avatar-2);
+  --color-avatar-3: var(--avatar-3);
+  --color-avatar-4: var(--avatar-4);
+  --color-avatar-5: var(--avatar-5);
+  --color-avatar-6: var(--avatar-6);
+  --color-avatar-7: var(--avatar-7);
+  --color-avatar-8: var(--avatar-8);
+}
+
+/* Sombras próprias: as padrão do Tailwind (preto a 10%) somem no escuro */
+@theme {
+  --shadow-xs: 0 1px 1px 0 oklch(0 0 0 / 0.30);
+  --shadow-sm: 0 1px 2px 0 oklch(0 0 0 / 0.40);
+  --shadow-md: 0 4px 12px -2px oklch(0 0 0 / 0.45);
+  --shadow-lg: 0 12px 28px -6px oklch(0 0 0 / 0.55);
+  --shadow-2xl: 0 24px 60px -12px oklch(0 0 0 / 0.65);
+  --shadow-card: inset 0 1px 0 0 oklch(1 0 0 / 0.04), 0 1px 2px 0 oklch(0 0 0 / 0.40);
+
+  /* Fonte Inter (link do Google Fonts no __root.tsx), com fallback do sistema */
+  --font-sans: "Inter", ui-sans-serif, system-ui, "Segoe UI", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+
+  /* Texto 11px (text-2xs): rótulos, chips e eyebrow */
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+}
+
+/* Rótulo pequeno em maiúsculas, acima de títulos e em cabeçalhos de grupo */
+@utility eyebrow {
+  @apply text-2xs font-semibold tracking-[0.06em] text-muted-foreground uppercase;
+}
+
+:root {
+  /* Tema único escuro. <html class="dark"> é fixo (__root.tsx). NÃO recriar um bloco .dark. */
+  --radius: 0.625rem;
+
+  /* Superfícies, do fundo para cima (grafite, matiz 285) */
+  --sidebar:    oklch(0.145 0.016 285); /* #090911 */
+  --background: oklch(0.165 0.016 285); /* #0d0d15 */
+  --lane:       oklch(0.195 0.018 285); /* #14141d trilha de abas, seção neutra */
+  --card:       oklch(0.260 0.020 285); /* #23232e */
+  --card-hover: oklch(0.285 0.022 285); /* #292935 */
+  --popover:    oklch(0.290 0.022 285); /* #2a2a36 menu, dialog, sheet, toast, tooltip */
+  --muted:      oklch(0.300 0.020 285); /* #2d2d38 */
+  --secondary:  oklch(0.310 0.022 285); /* #2f2f3b */
+  --accent:     oklch(0.320 0.024 285); /* #31313f hover neutro (antes #3d2a65 roxo) */
+
+  --foreground:           oklch(0.965 0.006 285); /* #f3f3f7 */
+  --card-foreground:      var(--foreground);
+  --popover-foreground:   var(--foreground);
+  --secondary-foreground: var(--foreground);
+  --accent-foreground:    var(--foreground);
+  --muted-foreground:     oklch(0.720 0.018 285); /* #a3a3b0 */
+  --subtle-foreground:    oklch(0.600 0.018 285); /* só ícone em repouso e placeholder */
+
+  --border:        oklch(1 0 0 / 0.08);
+  --border-strong: oklch(1 0 0 / 0.14);
+  --input:         oklch(1 0 0 / 0.12);
+  --ring:          oklch(0.72 0.15 292);  /* #a791fa */
+
+  --primary:            oklch(0.66 0.20 292); /* #9874ff texto, ícone, tinta */
+  --primary-strong:     oklch(0.56 0.21 292); /* #7c50e2 fundo de botão/checkbox/badge */
+  --primary-foreground: oklch(0.99 0 0);
+  --primary-glow:       oklch(0.77 0.13 294);
+
+  --destructive:            oklch(0.70 0.19 25); /* #ff645f texto e chip */
+  --destructive-strong:     oklch(0.58 0.21 25); /* #db2b33 fundo de botão */
+  --destructive-foreground: oklch(0.99 0 0);
+  --success: oklch(0.68 0.17 150);  --success-foreground: oklch(0.12 0.02 150); /* #2eb45c, mantido */
+  --warning: oklch(0.78 0.16 80);   --warning-foreground: oklch(0.18 0.03 80);  /* #ecaa0b, mantido */
+  --info:    oklch(0.72 0.13 245);  --info-foreground:    oklch(0.16 0.03 245); /* #56acf0, novo */
+  --nurture: oklch(0.72 0.13 290);  --nurture-foreground: oklch(0.15 0.03 290); /* mantido */
+  --sale:    oklch(0.58 0.25 320);  --sale-foreground:    oklch(0.99 0.005 300);/* mantido */
+
+  /* Bandeira de prioridade (Urgente = destructive, Alta = warning) */
+  --priority-medium: oklch(0.80 0.10 240);  /* Média: azul claro */
+  --priority-low:    oklch(0.80 0.012 285); /* Baixa: cinza claro */
+
+  --chart-1: var(--primary);
+  --chart-2: oklch(0.75 0.18 320); --chart-3: oklch(0.55 0.20 270);
+  --chart-4: oklch(0.80 0.14 295); --chart-5: oklch(0.45 0.18 305); /* mantidos */
+
+  --sidebar-foreground:          oklch(0.93 0.008 285);
+  --sidebar-primary:             var(--primary);
+  --sidebar-primary-foreground:  oklch(0.99 0 0);
+  --sidebar-accent:              oklch(0.22 0.022 288); /* #1a1924 */
+  --sidebar-accent-foreground:   var(--foreground);
+  --sidebar-border:              oklch(1 0 0 / 0.06);
+  --sidebar-ring:                var(--ring);
+
+  /* Avatares (texto = --foreground, >= 7:1) */
+  --avatar-1: oklch(0.42 0.09 292); --avatar-2: oklch(0.42 0.09 250);
+  --avatar-3: oklch(0.42 0.09 205); --avatar-4: oklch(0.42 0.09 160);
+  --avatar-5: oklch(0.42 0.09 120); --avatar-6: oklch(0.42 0.09 75);
+  --avatar-7: oklch(0.42 0.09 35);  --avatar-8: oklch(0.42 0.09 350);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+    scrollbar-width: thin;
+    scrollbar-color: oklch(1 0 0 / 0.14) transparent;
+  }
+
+  html {
+    color-scheme: dark;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--primary) 35%, transparent);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    /* Um brilho só, fraco, no canto de cima */
+    background-image: radial-gradient(1000px 520px at 12% -12%, color-mix(in oklab, var(--primary) 10%, transparent), transparent 70%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+}
+
+.mention-editor:empty::before {
+  content: attr(data-placeholder);
+  color: var(--color-muted-foreground);
+  pointer-events: none;
+}
+.mention-editor:focus:empty::before { opacity: 0.7; }
+
+/* ============ Calendar — clean look ============ */
+.nexus-cal .rbc-calendar { background: transparent; font-family: inherit; color: var(--color-foreground); }
+.nexus-cal .rbc-month-view,
+.nexus-cal .rbc-time-view,
+.nexus-cal .rbc-agenda-view {
+  border: none;
+  background: transparent;
+}
+.nexus-cal .rbc-month-row { border-color: color-mix(in oklab, var(--color-border) 40%, transparent); }
+.nexus-cal .rbc-day-bg + .rbc-day-bg,
+.nexus-cal .rbc-month-row + .rbc-month-row,
+.nexus-cal .rbc-header + .rbc-header { border-color: color-mix(in oklab, var(--color-border) 30%, transparent); }
+.nexus-cal .rbc-header {
+  border-bottom: none;
+  padding: 10px 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted-foreground);
+  background: transparent;
+}
+.nexus-cal .rbc-month-row { overflow: visible; }
+.nexus-cal-expanded .rbc-month-view { height: auto !important; }
+.nexus-cal-expanded .rbc-month-row { flex: none !important; min-height: 120px; height: auto !important; overflow: visible !important; }
+.nexus-cal-expanded .rbc-row-content { height: auto !important; }
+.nexus-cal-expanded .rbc-show-more { display: none !important; }
+.nexus-cal-expanded .rbc-row-segment { overflow: visible !important; }
+.nexus-cal .rbc-date-cell {
+  padding: 6px 8px;
+  text-align: right;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-muted-foreground);
+  font-variant-numeric: tabular-nums;
+}
+.nexus-cal .rbc-date-cell > a { color: inherit; cursor: default; pointer-events: none; }
+.nexus-cal .rbc-off-range { opacity: 0.4; }
+.nexus-cal .rbc-off-range-bg { background: transparent; }
+.nexus-cal .rbc-today { background-color: color-mix(in oklab, var(--color-primary) 8%, transparent); }
+.nexus-cal .rbc-now.rbc-current > a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--color-primary-strong);
+  color: var(--color-primary-foreground);
+  font-weight: 600;
+  pointer-events: auto;
+}
+.nexus-cal .rbc-day-bg { transition: background 0.15s; }
+.nexus-cal .rbc-day-bg:hover { background: color-mix(in oklab, var(--color-accent) 30%, transparent); }
+.nexus-cal .rbc-event {
+  outline: none !important;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.nexus-cal .rbc-event:hover {
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--color-primary) 35%, transparent), 0 1px 2px rgba(0,0,0,0.2) !important;
+  transform: translateY(-1px);
+}
+.nexus-cal .rbc-event.rbc-selected { outline: 2px solid var(--color-primary) !important; outline-offset: 1px; }
+.nexus-cal .rbc-show-more {
+  background: transparent;
+  color: var(--color-muted-foreground);
+  font-size: 0.7rem;
+  font-weight: 500;
+  padding: 1px 4px;
+}
+.nexus-cal .rbc-show-more:hover { color: var(--color-foreground); text-decoration: none; }
+.nexus-cal .rbc-time-view { border: 1px solid color-mix(in oklab, var(--color-border) 40%, transparent); border-radius: 8px; }
+.nexus-cal .rbc-time-header-content,
+.nexus-cal .rbc-time-content,
+.nexus-cal .rbc-time-gutter,
+.nexus-cal .rbc-day-slot,
+.nexus-cal .rbc-time-slot { border-color: color-mix(in oklab, var(--color-border) 25%, transparent); }
+.nexus-cal .rbc-current-time-indicator { background: var(--color-primary); height: 2px; }
+.nexus-cal .rbc-agenda-view table { border-color: color-mix(in oklab, var(--color-border) 40%, transparent); }
+.nexus-cal .rbc-agenda-view table th,
+.nexus-cal .rbc-agenda-view table td { border-color: color-mix(in oklab, var(--color-border) 25%, transparent); padding: 8px 12px; }
+.nexus-cal .rbc-agenda-empty { padding: 40px; text-align: center; color: var(--color-muted-foreground); }
+.nexus-cal .rbc-overlay {
+  background: var(--color-popover);
+  color: var(--color-popover-foreground);
+  border: 1px solid color-mix(in oklab, var(--color-border) 60%, transparent);
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  padding: 8px;
+}
+
+/* ============ Editor de texto (Documentos e descrições) ============ */
+.doc-prose {
+  --doc-font-size: 16px;
+  font-size: var(--doc-font-size);
+  line-height: 1.7;
+  color: color-mix(in oklab, var(--color-foreground) 95%, transparent);
+  word-wrap: break-word;
+}
+.doc-size-sm .doc-prose { --doc-font-size: 14px; }
+.doc-size-md .doc-prose { --doc-font-size: 16px; }
+.doc-size-lg .doc-prose { --doc-font-size: 18px; }
+.doc-prose.doc-prose-compact { --doc-font-size: 14px; line-height: 1.6; }
+
+.doc-prose p { margin: 0.35em 0; }
+.doc-prose h1, .doc-prose h2, .doc-prose h3, .doc-prose h4 { scroll-margin-top: 7rem; color: var(--color-foreground); }
+.doc-prose h1 { font-size: 1.9em; font-weight: 700; line-height: 1.2; margin: 1.4em 0 0.4em; letter-spacing: -0.015em; }
+.doc-prose h2 { font-size: 1.5em; font-weight: 700; line-height: 1.25; margin: 1.3em 0 0.4em; letter-spacing: -0.01em; }
+.doc-prose h3 { font-size: 1.2em; font-weight: 600; line-height: 1.3; margin: 1.1em 0 0.3em; }
+.doc-prose h4 { font-size: 1.05em; font-weight: 600; line-height: 1.35; margin: 1em 0 0.25em; }
+.doc-prose.doc-prose-compact h1 { font-size: 1.45em; }
+.doc-prose.doc-prose-compact h2 { font-size: 1.25em; }
+.doc-prose.doc-prose-compact h3 { font-size: 1.1em; }
+.doc-prose > :first-child { margin-top: 0; }
+
+.doc-prose strong { color: var(--color-foreground); font-weight: 700; }
+.doc-prose a { color: var(--color-primary); text-decoration: underline; text-decoration-color: color-mix(in oklab, var(--color-primary) 50%, transparent); text-underline-offset: 3px; cursor: pointer; }
+.doc-prose a:hover { text-decoration-color: var(--color-primary); }
+.doc-prose code { background: color-mix(in oklab, var(--color-muted) 70%, transparent); padding: 2px 6px; border-radius: 4px; font-size: 0.88em; color: color-mix(in oklab, var(--color-primary) 80%, var(--color-foreground)); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.doc-prose pre { background: color-mix(in oklab, var(--color-muted) 60%, transparent); border: 1px solid var(--color-border); border-radius: 8px; padding: 12px 16px; overflow-x: auto; margin: 0.8em 0; font-size: 0.9em; }
+.doc-prose pre code { background: transparent; padding: 0; color: inherit; }
+.doc-prose mark { background: color-mix(in oklab, var(--color-warning) 40%, transparent); color: inherit; padding: 0 2px; border-radius: 3px; }
+.doc-prose hr { border: none; border-top: 1px solid var(--color-border); margin: 1.6em 0; }
+.doc-prose hr.ProseMirror-selectednode { border-top-color: var(--color-primary); }
+
+/* Listas */
+.doc-prose ul, .doc-prose ol { padding-left: 1.6em; margin: 0.4em 0; }
+.doc-prose ul { list-style: disc; }
+.doc-prose ul ul { list-style: circle; }
+.doc-prose ul ul ul { list-style: square; }
+.doc-prose ol { list-style: decimal; }
+.doc-prose li { margin: 0.15em 0; }
+.doc-prose li > p { margin: 0; }
+.doc-prose li::marker { color: color-mix(in oklab, var(--color-primary) 75%, var(--color-muted-foreground)); }
+.doc-prose ol > li::marker { font-weight: 600; }
+.doc-prose ul[data-type="taskList"] { list-style: none; padding-left: 0.2em; }
+.doc-prose ul[data-type="taskList"] li { display: flex; align-items: flex-start; gap: 0.55em; }
+.doc-prose ul[data-type="taskList"] li > label { flex-shrink: 0; display: flex; align-items: center; height: calc(var(--doc-font-size) * 1.7); user-select: none; }
+.doc-prose ul[data-type="taskList"] li > div { flex: 1; min-width: 0; }
+.doc-prose ul[data-type="taskList"] input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--color-primary); cursor: pointer; }
+.doc-prose ul[data-type="taskList"] li[data-checked="true"] > div { text-decoration: line-through; color: var(--color-muted-foreground); }
+.doc-prose ul[data-type="taskList"] ul[data-type="taskList"] { margin: 0.1em 0; }
+
+/* Citação */
+.doc-prose blockquote { border-left: 3px solid color-mix(in oklab, var(--color-primary) 70%, transparent); padding: 0.15em 0 0.15em 1em; color: var(--color-muted-foreground); margin: 0.9em 0; }
+
+/* Tabela: o editor cria a tabela dentro de .tableWrapper, sem classe própria,
+   então o estilo vale para qualquer tabela do editor. */
+.doc-prose .tableWrapper { overflow-x: auto; margin: 1em 0; padding: 2px 0 6px; }
+.doc-prose table { border-collapse: collapse; table-layout: fixed; width: 100%; margin: 0; overflow: hidden; }
+.doc-prose table td,
+.doc-prose table th {
+  border: 1px solid var(--color-border-strong, var(--color-border));
+  padding: 6px 10px;
+  vertical-align: top;
+  position: relative;
+  min-width: 1em;
+  box-sizing: border-box;
+}
+.doc-prose table th { background: color-mix(in oklab, var(--color-muted) 65%, transparent); font-weight: 600; text-align: left; }
+.doc-prose table td > p, .doc-prose table th > p { margin: 0; }
+.doc-prose table .selectedCell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: color-mix(in oklab, var(--color-primary) 22%, transparent);
+  pointer-events: none;
+  z-index: 2;
+}
+.doc-prose table .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: -2px;
+  width: 4px;
+  background: var(--color-primary);
+  pointer-events: none;
+  z-index: 3;
+}
+.doc-prose.resize-cursor, .doc-prose .resize-cursor { cursor: col-resize; }
+.doc-prose .tableWrapper.ProseMirror-selectednode table { outline: 2px solid var(--color-primary); }
+
+/* Caixa de destaque */
+/* Cores de conteúdo (faixa, selo, fundo do bloco). Ficam salvas no documento pelo
+   nome ("red", "blue"...), e a cor de verdade sai daqui. */
+[data-color="red"], [data-variant^="red"], [data-block-color="red"] { --doc-c: #ef4444; }
+[data-color="orange"], [data-variant^="orange"], [data-block-color="orange"] { --doc-c: #f97316; }
+[data-color="yellow"], [data-variant^="yellow"], [data-block-color="yellow"] { --doc-c: #eab308; }
+[data-color="blue"], [data-variant^="blue"], [data-block-color="blue"] { --doc-c: #3b82f6; }
+[data-color="purple"], [data-variant^="purple"], [data-block-color="purple"] { --doc-c: #8b5cf6; }
+[data-color="pink"], [data-variant^="pink"], [data-block-color="pink"] { --doc-c: #ec4899; }
+[data-color="green"], [data-variant^="green"], [data-block-color="green"] { --doc-c: #22c55e; }
+[data-color="gray"], [data-variant^="gray"], [data-block-color="gray"] { --doc-c: #6b7280; }
+
+/* Faixa (banner do ClickUp): suave ou forte */
+.doc-prose .doc-callout {
+  --doc-c: #3b82f6;
+  position: relative;
+  margin: 0.9em 0;
+  padding: 0.65em 1em;
+  border-radius: 8px;
+  border: 1px solid color-mix(in oklab, var(--doc-c) 40%, transparent);
+  background: color-mix(in oklab, var(--doc-c) 14%, transparent);
+}
+.doc-prose .doc-callout[data-variant$="-strong"] {
+  border-color: transparent;
+  background: color-mix(in oklab, var(--doc-c) 82%, black);
+  color: white;
+}
+.doc-prose .doc-callout[data-variant$="-strong"] strong,
+.doc-prose .doc-callout[data-variant$="-strong"] a { color: inherit; }
+/* Faixas antigas (antes das cores do ClickUp): mantêm o ícone */
+.doc-prose .doc-callout[data-variant="info"],
+.doc-prose .doc-callout[data-variant="tip"],
+.doc-prose .doc-callout[data-variant="warning"],
+.doc-prose .doc-callout[data-variant="danger"] { padding-left: 2.8em; }
+.doc-prose .doc-callout[data-variant="info"] { --doc-c: var(--color-info, var(--color-primary)); }
+.doc-prose .doc-callout[data-variant="tip"] { --doc-c: var(--color-success); }
+.doc-prose .doc-callout[data-variant="warning"] { --doc-c: var(--color-warning); }
+.doc-prose .doc-callout[data-variant="danger"] { --doc-c: var(--color-destructive); }
+.doc-prose .doc-callout[data-variant="info"]::before,
+.doc-prose .doc-callout[data-variant="tip"]::before,
+.doc-prose .doc-callout[data-variant="warning"]::before,
+.doc-prose .doc-callout[data-variant="danger"]::before { position: absolute; left: 0.85em; top: 0.62em; font-size: 1.05em; line-height: 1.6; }
+.doc-prose .doc-callout[data-variant="info"]::before { content: "ℹ️"; }
+.doc-prose .doc-callout[data-variant="tip"]::before { content: "💡"; }
+.doc-prose .doc-callout[data-variant="warning"]::before { content: "⚠️"; }
+.doc-prose .doc-callout[data-variant="danger"]::before { content: "🚨"; }
+.doc-banner-sample {
+  display: inline-block;
+  border: 1px solid color-mix(in oklab, var(--doc-c) 50%, transparent);
+  background: color-mix(in oklab, var(--doc-c) 22%, transparent);
+}
+.doc-banner-sample[data-strong="true"] { background: var(--doc-c); border-color: transparent; }
+
+/* Selo: trecho do texto dentro de uma etiqueta */
+.doc-badge {
+  --doc-c: #6b7280;
+  padding: 0.1em 0.45em;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-weight: 500;
+  background: color-mix(in oklab, var(--doc-c) 20%, transparent);
+  color: color-mix(in oklab, var(--doc-c) 75%, var(--color-foreground));
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.doc-badge[data-strong="true"] { background: var(--doc-c); color: white; }
+
+/* Cor do bloco: fundo em um parágrafo ou título inteiro */
+.doc-prose [data-block-color] {
+  background: color-mix(in oklab, var(--doc-c) 16%, transparent);
+  border-radius: 6px;
+  padding: 0.15em 0.5em;
+}
+.doc-prose .doc-callout > :first-child { margin-top: 0; }
+.doc-prose .doc-callout > :last-child { margin-bottom: 0; }
+
+/* Seção recolhível */
+.doc-prose .doc-details {
+  display: flex;
+  gap: 0.35em;
+  margin: 0.6em 0;
+  padding: 0.35em 0.6em 0.35em 0.25em;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+}
+.doc-prose .doc-details > button {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5em;
+  height: calc(var(--doc-font-size) * 1.7);
+  border-radius: 4px;
+  color: var(--color-muted-foreground);
+  cursor: pointer;
+}
+.doc-prose .doc-details > button:hover { background: var(--color-accent); color: var(--color-foreground); }
+.doc-prose .doc-details > button::before { content: "▶"; font-size: 0.65em; transition: transform 0.15s ease; }
+.doc-prose .doc-details.is-open > button::before { transform: rotate(90deg); }
+.doc-prose .doc-details > div { flex: 1; min-width: 0; }
+.doc-prose .doc-details summary { font-weight: 600; list-style: none; }
+.doc-prose .doc-details summary::-webkit-details-marker { display: none; }
+.doc-prose .doc-details [data-type="detailsContent"] > :first-child { margin-top: 0.3em; }
+
+/* Imagem e vídeo */
+.doc-prose img { max-width: 100%; height: auto; border-radius: 8px; }
+.doc-prose img.ProseMirror-selectednode { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+.doc-prose .doc-embed { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; margin: 1em 0; border: 1px solid var(--color-border); }
+.doc-prose .doc-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.doc-prose .ProseMirror-selectednode .doc-embed, .doc-prose .doc-embed.ProseMirror-selectednode { outline: 2px solid var(--color-primary); }
+
+/* Texto de ajuda nas linhas vazias */
+.doc-prose .is-empty::before,
+.doc-prose p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  color: color-mix(in oklab, var(--color-muted-foreground) 60%, transparent);
+}
+
+/* Bloco selecionado pela alça e linha de soltar ao arrastar */
+.doc-prose .ProseMirror-selectednode:not(img):not(hr):not(.tableWrapper) { outline: 2px solid color-mix(in oklab, var(--color-primary) 55%, transparent); outline-offset: 2px; border-radius: 4px; }
+.ProseMirror-gapcursor { display: none; pointer-events: none; position: absolute; }
+.ProseMirror-gapcursor::after { content: ""; display: block; position: absolute; top: -2px; width: 20px; border-top: 1px solid var(--color-foreground); animation: ProseMirror-cursor-blink 1.1s steps(2, start) infinite; }
+@keyframes ProseMirror-cursor-blink { to { visibility: hidden; } }
+.ProseMirror-focused .ProseMirror-gapcursor { display: block; }
+
+
+/* ==== Funil theme (área /funis) ==== */
+.funil-theme {
+  /* Mesmo formato de cor do resto do app (oklch direto, não HSL solto):
+     com o formato antigo a cor virava inválida e sumia (ex.: switch ativo). */
+  --primary: oklch(0.68 0.24 300);
+  /* Botão, switch e checkbox usam primary-strong: aqui seguem o roxo do Funis */
+  --primary-strong: var(--primary);
+  --primary-glow: oklch(0.78 0.19 302);
+  background:
+    radial-gradient(circle at 15% 10%, rgba(168, 85, 247, 0.12), transparent 40%),
+    radial-gradient(circle at 85% 90%, rgba(6, 182, 212, 0.10), transparent 45%),
+    linear-gradient(180deg, hsl(230 25% 6%), hsl(230 30% 4%));
+  color-scheme: dark;
+}
+.funil-theme .rounded-xl,
+.funil-theme .rounded-lg {
+  backdrop-filter: blur(6px);
+}
+.funil-theme .border {
+  border-color: hsl(270 40% 30% / 0.35);
+}
+
+/* Cor de entidade (coluna, esteira, tag). Defina --tint via style={{ "--tint": cor }} */
+.tint {
+  --tint: var(--muted-foreground);
+  --tint-lane: color-mix(in oklab, var(--tint) 6%, var(--background));  /* fundo da coluna/seção */
+  --tint-edge: color-mix(in oklab, var(--tint) 16%, transparent);       /* borda da coluna */
+  --tint-soft: color-mix(in oklab, var(--tint) 14%, transparent);       /* hover, área de soltar */
+  --tint-pill: color-mix(in oklab, var(--tint) 18%, transparent);       /* fundo da pílula */
+  --tint-line: color-mix(in oklab, var(--tint) 45%, transparent);       /* hover do card, anel ao arrastar */
+  --tint-ink:  color-mix(in oklab, var(--tint) 62%, var(--foreground)); /* texto e ícone na cor */
+}
