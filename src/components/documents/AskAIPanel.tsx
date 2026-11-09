@@ -185,9 +185,9 @@ export function AskAIPanel({ open, onOpenChange }: { open: boolean; onOpenChange
             <div className="text-sm text-muted-foreground space-y-2">
               <p>Exemplos:</p>
               <ul className="list-disc pl-5 space-y-1 text-xs">
-                <li>"O que ficou definido sobre a demanda X nas dailys?"</li>
-                <li>"Resumo das decisões da última reunião de produto"</li>
-                <li>"Onde está documentado o processo de aprovação de VSL?"</li>
+                <li>"Qual é o prazo para pedir uma peça para Design?"</li>
+                <li>"Quando acontece a reunião semanal?"</li>
+                <li>"Como publicar uma página nova?"</li>
               </ul>
             </div>
           )}

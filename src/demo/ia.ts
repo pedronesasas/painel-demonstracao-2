@@ -53,11 +53,11 @@ function perguntarDocumentos(pergunta: string): Response {
 }
 
 const ESTEIRA_POR_PALAVRA: Array<[RegExp, string]> = [
-  [/edi[cç][aã]o|v[ií]deo|criativo|vsl|corte|legenda/i, "Edição"],
-  [/copy|e-?mail|whats|roteiro|texto|p[aá]gina de vendas/i, "Copy"],
-  [/an[uú]ncio|tr[aá]fego|campanha|p[uú]blico|pixel/i, "Tráfego"],
-  [/p[aá]gina|checkout|dom[ií]nio|bot[aã]o|site|[aá]rea de membros/i, "Infra"],
-  [/teste|hip[oó]tese/i, "Testes"],
+  [/design|v[ií]deo|banner|arte|logo|corte|legenda|stories/i, "Design e Vídeo"],
+  [/conte[uú]do|post|newsletter|e-?mail|roteiro|texto|blog/i, "Conteúdo"],
+  [/an[uú]ncio|m[ií]dia|campanha|p[uú]blico|pixel|remarketing/i, "Mídia paga"],
+  [/p[aá]gina|checkout|dom[ií]nio|bot[aã]o|site|formul[aá]rio/i, "Site e Checkout"],
+  [/experimento|teste|hip[oó]tese/i, "Experimentos"],
 ];
 
 function criarTarefas(texto: string): Response {
@@ -76,7 +76,7 @@ function criarTarefas(texto: string): Response {
   };
 
   const tarefas = linhas.map((l) => {
-    const nomeEsteira = ESTEIRA_POR_PALAVRA.find(([re]) => re.test(l))?.[1] ?? "Gestão";
+    const nomeEsteira = ESTEIRA_POR_PALAVRA.find(([re]) => re.test(l))?.[1] ?? "Operações";
     const esteira = esteiras.find((e) => e.name === nomeEsteira) ?? esteiras[0];
     const coluna = colunas.find((c) => c.board_id === esteira?.id);
     const responsaveis = pessoas

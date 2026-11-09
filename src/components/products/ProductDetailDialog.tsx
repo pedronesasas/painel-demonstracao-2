@@ -455,7 +455,7 @@ function DynamicList<T extends Record<string, string>>({
 type FunnelSettings = { code: string | null; kind: "principal" | "upsell"; archived: boolean };
 
 /**
- * Como o produto aparece na tela de Funis: sigla (SOP), se é oferta principal ou
+ * Como o produto aparece na tela de Funis: sigla, se é oferta principal ou
  * produto de upsell, e se está arquivado. Fica aqui para ter um cadastro só.
  */
 function ProductFunnelSettings({ productId, canEdit }: { productId: string; canEdit: boolean }) {
@@ -497,7 +497,7 @@ function ProductFunnelSettings({ productId, canEdit }: { productId: string; canE
           value={code}
           onChange={(e) => setCode(e.target.value.toUpperCase())}
           onBlur={() => { const v = code.trim() || null; if (v !== (data.code ?? null)) save.mutate({ code: v }); }}
-          placeholder="ANJ"
+          placeholder="PR1"
           maxLength={6}
           disabled={disabled}
           className="h-8 font-mono"

@@ -69,9 +69,9 @@ export const Route = createFileRoute("/campaigns/grupo/$groupKey")({
   head: () => ({
     meta: [
       { title: "Campanha — NEXUS" },
-      { name: "description", content: "Campanha da semana em todas as línguas." },
+      { name: "description", content: "A campanha em todas as línguas." },
       { property: "og:title", content: "Campanha — NEXUS" },
-      { property: "og:description", content: "Campanha da semana em todas as línguas." },
+      { property: "og:description", content: "A campanha em todas as línguas." },
     ],
   }),
   component: () => (
@@ -133,7 +133,7 @@ function CampaignGroupPage() {
       <div className="space-y-6">
         <BackButton />
         <Card className="p-8 text-center text-muted-foreground">
-          Não foi possível carregar as campanhas desta semana.
+          Não foi possível carregar esta campanha.
         </Card>
       </div>
     );
@@ -152,8 +152,8 @@ function CampaignGroupPage() {
             </p>
             <p className="text-muted-foreground">
               {weekGroups.length > 0
-                ? "O nome do produto pode ter mudado. Estas são as campanhas cadastradas nesta semana:"
-                : "Não há campanhas cadastradas nesta semana."}
+                ? "O nome do produto pode ter mudado. Estas são as cadastradas com este número:"
+                : "Não há campanhas cadastradas com este número."}
             </p>
           </div>
         </Card>
@@ -179,7 +179,7 @@ function CampaignGroupPage() {
           <div className="font-mono text-sm text-primary">Todas as línguas</div>
           <PageHeader title={groupTitle(group)} />
           <div className="mt-2 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-            <span>Semana {group.week} / {group.year}</span>
+            <span>Campanha {group.week} / {group.year}</span>
             {period && <span>{period}</span>}
             <Badge variant={TIMING_BADGE[group.timing]}>{TIMING_LABEL[group.timing]}</Badge>
             <span>
@@ -255,7 +255,7 @@ function GroupOverview({ members, metricsById, langById, phase }: SectionProps) 
   return (
     <>
       <p className="text-sm text-muted-foreground">
-        Soma {members.length === 1 ? "da língua" : `das ${members.length} línguas`} desta semana
+        Soma {members.length === 1 ? "da língua" : `das ${members.length} línguas`} desta campanha
         {phase !== "all" ? ` (${PHASE_LABEL[phase].toLowerCase()})` : ""}. As taxas são calculadas sobre o
         total (ex.: abertos de todas as línguas ÷ enviados de todas as línguas), não pela média das taxas.
       </p>

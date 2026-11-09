@@ -146,7 +146,7 @@ function CampaignDetailPage() {
           <div className="font-mono text-sm text-primary">{campaign.code}</div>
           <PageHeader title={campaign.product_name} />
           <div className="flex flex-wrap gap-3 mt-2 text-sm text-muted-foreground items-center">
-            <span>Semana {campaign.week_number} / {campaign.year}</span>
+            <span>Campanha {campaign.week_number} / {campaign.year}</span>
             {period && <span>{period}</span>}
             {/* Situação pelas datas; sem datas, mantém o status do cadastro */}
             {timing !== "unknown" ? (
@@ -636,7 +636,7 @@ function WhatsAppTab({ campaignId, canEdit, currency }: { campaignId: string; ca
         <KpiBox label="Mensagens" value={String(messages.length)} />
         <KpiBox label="Membros" value={memberCount.toLocaleString("pt-BR")} />
         <KpiBox
-          label="Entraram / saíram na semana"
+          label="Entraram / saíram na campanha"
           value={`+${savedJoined.toLocaleString("pt-BR")} / −${savedLeft.toLocaleString("pt-BR")}`}
         />
         <KpiBox label="Leitura média" value={totalRecipients ? formatPercent(rate(totalReads, totalRecipients)) : "—"} />
@@ -652,11 +652,11 @@ function WhatsAppTab({ campaignId, canEdit, currency }: { campaignId: string; ca
               <Input type="number" min={0} value={members || memberCount} onChange={(e) => setMembers(Number(e.target.value))} />
             </div>
             <div className="space-y-2 w-36">
-              <Label>Entraram na semana</Label>
+              <Label>Entraram na campanha</Label>
               <Input type="number" min={0} value={joined} placeholder={String(savedJoined)} onChange={(e) => setJoined(e.target.value)} />
             </div>
             <div className="space-y-2 w-36">
-              <Label>Saíram na semana</Label>
+              <Label>Saíram na campanha</Label>
               <Input type="number" min={0} value={left} placeholder={String(savedLeft)} onChange={(e) => setLeft(e.target.value)} />
             </div>
             <Button onClick={saveMembers}>Salvar</Button>

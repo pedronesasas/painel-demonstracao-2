@@ -152,7 +152,7 @@ function CampaignsListPage() {
     <div className="space-y-6">
       <PageHeader
         title="Campanhas"
-        description="Todas as campanhas semanais"
+        description="Todas as campanhas"
         actions={canEdit && (
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
@@ -250,7 +250,7 @@ function CampaignsListPage() {
                 <TableHead>Código</TableHead>
                 <TableHead>Produto</TableHead>
                 <TableHead>Mercado</TableHead>
-                <TableHead>Semana</TableHead>
+                <TableHead>Nº</TableHead>
                 <TableHead>Ano</TableHead>
                 <TableHead>Período</TableHead>
 
@@ -422,11 +422,11 @@ function NewCampaignDialog({ onCreated }: { onCreated: () => void }) {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label>Semana (1-52)</Label>
+            <Label>Número da campanha</Label>
             <Input
               type="number"
               min={1}
-              max={52}
+              max={999}
               value={week}
               onChange={(e) => setWeek(Number(e.target.value))}
               required
@@ -615,8 +615,8 @@ function EditCampaignDialog({ campaign, onSaved }: { campaign: CampaignRow; onSa
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label>Semana (1-52)</Label>
-            <Input type="number" min={1} max={52} value={week} onChange={(e) => setWeek(Number(e.target.value))} required />
+            <Label>Número da campanha</Label>
+            <Input type="number" min={1} max={999} value={week} onChange={(e) => setWeek(Number(e.target.value))} required />
           </div>
           <div className="space-y-2">
             <Label>Mercado</Label>

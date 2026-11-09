@@ -166,19 +166,19 @@ export function gerarBanco(): Banco {
     pendente: { id: uid(5), label: "Pendente", is_done: false, is_paused: false, is_system: true, sort: 10 },
     andamento: { id: uid(5), label: "Em progresso", is_done: false, is_paused: false, is_system: true, sort: 20 },
     revisao: { id: uid(5), label: "Revisão", is_done: false, is_paused: false, is_system: false, sort: 30 },
-    metricas: { id: uid(5), label: "Análise de métricas", is_done: false, is_paused: false, is_system: false, sort: 40 },
+    metricas: { id: uid(5), label: "Validação", is_done: false, is_paused: false, is_system: false, sort: 40 },
     pausada: { id: uid(5), label: "Pausada", is_done: false, is_paused: true, is_system: true, sort: 50 },
     concluido: { id: uid(5), label: "Concluído", is_done: true, is_paused: false, is_system: true, sort: 90 },
   };
   b.board_column_kinds = Object.values(tipos).map((k) => ({ ...k, created_at: criadoBase, updated_at: criadoBase }));
 
   const esteiras = [
-    { nome: "Copy", cor: "#e17d73", colunas: ["pendente", "andamento", "revisao", "pausada", "concluido"] },
-    { nome: "Tráfego", cor: "#6366f1", colunas: ["pendente", "andamento", "metricas", "pausada", "concluido"] },
-    { nome: "Edição", cor: "#22c55e", colunas: ["pendente", "andamento", "revisao", "pausada", "concluido"] },
-    { nome: "Infra", cor: "#f97316", colunas: ["pendente", "andamento", "revisao", "pausada", "concluido"] },
-    { nome: "Testes", cor: "#eab308", colunas: ["pendente", "andamento", "metricas", "pausada", "concluido"] },
-    { nome: "Gestão", cor: "#14b8a6", colunas: ["pendente", "andamento", "pausada", "concluido"] },
+    { nome: "Conteúdo", cor: "#e17d73", colunas: ["pendente", "andamento", "revisao", "pausada", "concluido"] },
+    { nome: "Mídia paga", cor: "#6366f1", colunas: ["pendente", "andamento", "metricas", "pausada", "concluido"] },
+    { nome: "Design e Vídeo", cor: "#22c55e", colunas: ["pendente", "andamento", "revisao", "pausada", "concluido"] },
+    { nome: "Site e Checkout", cor: "#f97316", colunas: ["pendente", "andamento", "revisao", "pausada", "concluido"] },
+    { nome: "Experimentos", cor: "#eab308", colunas: ["pendente", "andamento", "metricas", "pausada", "concluido"] },
+    { nome: "Operações", cor: "#14b8a6", colunas: ["pendente", "andamento", "pausada", "concluido"] },
   ] as const;
   const COR_COLUNA: Record<string, string> = { pendente: "#64748b", andamento: "#3b82f6", revisao: "#a855f7", metricas: "#06b6d4", pausada: "#94a3b8", concluido: "#22c55e" };
   b.boards = [];
@@ -201,7 +201,7 @@ export function gerarBanco(): Banco {
   b.board_profile_access = [];
 
   const tags = [
-    ["Campanha da semana", "#3b82f6"], ["Criativo", "#a855f7"], ["Urgente cliente", "#ef4444"],
+    ["Lançamento", "#3b82f6"], ["Peça visual", "#a855f7"], ["Prioridade da diretoria", "#ef4444"],
     ["Ideia", "#eab308"], ["Bug", "#f97316"], ["Recorrente", "#14b8a6"],
   ].map(([name, color]) => ({ id: uid(8), name, color, created_at: criadoBase }));
   b.tags = tags;
@@ -256,6 +256,9 @@ export function gerarBanco(): Banco {
   const vslDe: Record<string, string> = {};
   const TIPOS_FRONT = ["FRONT", "UP1", "DOWN1", "UP2", "DOWN2"] as const;
   const TIPOS_BACK = ["FRONT", "UP1", "DOWN1"] as const;
+  const ROTULO_VIDEO: Record<string, string> = {
+    FRONT: "Vídeo de vendas", UP1: "Oferta extra 1", DOWN1: "Alternativa 1", UP2: "Oferta extra 2", DOWN2: "Alternativa 2",
+  };
   produtos.slice(0, 5).forEach((p, i) => {
     for (const mi of vendeEm[i]!) {
       const m = mercados[mi]!;
@@ -267,10 +270,10 @@ export function gerarBanco(): Banco {
           const editor = r.pick(["J", "EX"]);
           const id = uid(12);
           vslDe[`${p.id}|${m.id}|${estagio}|${tipo}`] = id;
-          const rotulo = tipo === "FRONT" ? "VSL" : `VSL-${tipo}`;
+          const rotulo = ROTULO_VIDEO[tipo];
           b.vsls!.push({
             id, product_id: p.id, language_id: m.id, type: tipo, funnel_stage: estagio,
-            name: `[${p.code}] [${rotulo}] [ID-0${estagio === "BACK" ? 2 : 1}] [${m.region}] [PITCH ${pitch}] [R-${editor}]`,
+            name: `${nomeProduto(p).charAt(0)}${nomeProduto(p).slice(1).toLowerCase()} · ${rotulo} · ${m.region} · ${estagio === "BACK" ? "clientes" : "anúncios"} · v${r.int(1, 3)}`,
             pitch_time_seconds: pitch, conversion_pct: tipo === "FRONT" ? Number((r.rnd() * 5 + 0.8).toFixed(2)) : Number((r.rnd() * 18 + 3).toFixed(2)),
             editor, is_live: ti < 3 || r.chance(0.5), parent_id: null, part: null, segment: null,
             vturb_player_id: `${r.int(1e7, 9e7).toString(16)}${r.int(1e7, 9e7).toString(16)}`,
@@ -334,18 +337,18 @@ export function gerarBanco(): Banco {
   });
 
   b.offer_tests = [
-    { name: "Preço do Upsell 1 a R$ 297", produto: 0, estagio: "FRONT", status: "running", hipotese: "Subir o Upsell 1 de R$ 197 para R$ 297 aumenta a receita por comprador sem derrubar a conversão.", dias: -6 },
-    { name: "Pitch mais curto na VSL de entrada", produto: 1, estagio: "FRONT", status: "running", hipotese: "Chamar para a compra 2 minutos antes aumenta a conversão da página.", dias: -3 },
-    { name: "VSL no lugar da carta no back-end", produto: 2, estagio: "BACK", status: "finished", hipotese: "Vídeo converte melhor que texto para a base de compradores.", dias: -30 },
-    { name: "Downsell com bônus em vez de desconto", produto: 0, estagio: "BACK", status: "paused", hipotese: "Um bônus mantém o ticket e converte igual ao desconto.", dias: -14 },
+    { name: "Depoimentos logo no início da página", produto: 0, estagio: "FRONT", status: "running", hipotese: "Mostrar prova social antes do preço aumenta a conversão da entrada.", dias: -6 },
+    { name: "Parcelamento em destaque", produto: 1, estagio: "FRONT", status: "running", hipotese: "Mostrar o valor da parcela no lugar do preço cheio aumenta as compras.", dias: -3 },
+    { name: "Página curta no upsell", produto: 2, estagio: "BACK", status: "finished", hipotese: "Uma página de upsell mais curta converte melhor para quem acabou de comprar.", dias: -30 },
+    { name: "Garantia de 60 dias", produto: 0, estagio: "BACK", status: "paused", hipotese: "Uma garantia maior reduz o receio e aumenta as compras sem subir os reembolsos.", dias: -14 },
   ].map((t) => {
     const p = produtos[t.produto]!;
     return {
       id: uid(15), name: t.name, product_id: p.id, funnel_id: funilDe[`${p.id}|BR|${t.estagio}`] ?? null, offer_id: null, card_id: null,
       status: t.status, hypothesis: t.hipotese,
-      description: "Metade do tráfego vai para a versão nova; a outra metade fica na atual.",
-      result: t.status === "finished" ? "A VSL converteu 2,1% contra 1,4% da carta." : null,
-      conclusion: t.status === "finished" ? "VSL vira o padrão do back-end." : null,
+      description: "Metade dos visitantes vê a versão nova; a outra metade, a atual.",
+      result: t.status === "finished" ? "A página curta converteu 9,8% contra 7,1% da longa." : null,
+      conclusion: t.status === "finished" ? "Página curta vira o padrão dos upsells." : null,
       start_date: addDias(hoje, t.dias), end_date: t.status === "finished" ? addDias(hoje, t.dias + 14) : null,
       created_by: P.demo.id, created_at: momento(addDias(hoje, t.dias), 10), updated_at: momento(addDias(hoje, t.dias), 10),
     };
@@ -358,52 +361,50 @@ export function gerarBanco(): Banco {
 
   // ---------- campos personalizados ----------
   const campos = {
-    lingua: { id: uid(16), board_id: null, name: "🌏 Língua", type: "select", options: { values: ["Português", "Espanhol", "Alemão", "Italiano", "Francês"] }, position: 0 },
-    plataforma: { id: uid(16), board_id: null, name: "📢 Plataforma", type: "select", options: { values: ["Facebook", "YouTube", "TikTok", "E-mail", "WhatsApp", "Google"] }, position: 1 },
-    oferta: { id: uid(16), board_id: null, name: "🎯 Oferta", type: "product", options: {}, position: 2 },
-    link: { id: uid(16), board_id: null, name: "🔗 Material", type: "link", options: {}, position: 3 },
-    tipoTeste: { id: uid(16), board_id: boardId["Testes"], name: "🔠 Tipo de teste", type: "select", options: { values: ["Teste de VSL", "Teste de preço", "Teste de copy", "Teste de estrutura"] }, position: 0 },
+    canal: { id: uid(16), board_id: null, name: "📣 Canal", type: "select", options: { values: ["Instagram", "YouTube", "Blog", "E-mail", "Google", "LinkedIn"] }, position: 0 },
+    produto: { id: uid(16), board_id: null, name: "🎯 Produto", type: "product", options: {}, position: 1 },
+    esforco: { id: uid(16), board_id: null, name: "⏱️ Esforço", type: "select", options: { values: ["Pequeno", "Médio", "Grande"] }, position: 2 },
+    link: { id: uid(16), board_id: null, name: "🔗 Arquivo", type: "link", options: {}, position: 3 },
+    tipoTeste: { id: uid(16), board_id: boardId["Experimentos"], name: "🧪 Tipo de experimento", type: "select", options: { values: ["Página", "Preço", "Checkout", "Oferta"] }, position: 0 },
   };
   b.custom_fields = Object.values(campos).map((c) => ({ ...c, created_at: criadoBase }));
 
   // ---------- cards ----------
-  const { semana: semanaAtual } = semanaISO(hoje);
   const pessoas = [P.ana, P.bruno, P.carla, P.diego, P.elisa, P.fabio, P.helena, P.igor];
   type Modelo = { esteira: string; titulo: string; dono: typeof P.ana; desc?: string[]; subs?: string[]; tags?: number[] };
-  const S = (n: number) => `S${String(semanaAtual + n).padStart(2, "0")}`;
   const modelos: Modelo[] = [
-    { esteira: "Copy", titulo: `${S(0)} - PRODUTO 1 - e-mails e WhatsApp da campanha`, dono: P.bruno, desc: ["Reaproveitar a copy que mais vendeu no mês passado.", "Ajustar o horário das mensagens de venda para o fim de semana."], subs: ["E-mails de nutrição (seg a sex)", "E-mails de venda (sáb e dom)", "Mensagens do WhatsApp", "Revisão final"], tags: [0] },
-    { esteira: "Copy", titulo: `${S(1)} - PRODUTO 2 - e-mails e WhatsApp da campanha`, dono: P.bruno, subs: ["Briefing com o tráfego", "E-mails", "WhatsApp"], tags: [0] },
-    { esteira: "Copy", titulo: "Roteiro do criativo 07 - Produto 1", dono: P.bruno, subs: ["Gancho", "Corpo", "Chamada"], tags: [1] },
-    { esteira: "Copy", titulo: "Revisar página de vendas do Produto 3 (ITA)", dono: P.ana },
-    { esteira: "Copy", titulo: "Banco de ganchos para anúncios", dono: P.helena, tags: [3] },
-    { esteira: "Copy", titulo: "Tradução da campanha para o mercado LATAM", dono: P.helena },
-    { esteira: "Tráfego", titulo: "Subir criativos da semana - Produto 1", dono: P.carla, subs: ["Campanha de teste", "Escalar os 2 melhores"], tags: [1] },
-    { esteira: "Tráfego", titulo: "Relatório semanal de anúncios", dono: P.carla, desc: ["Gasto, CPA e ROAS por produto e por mercado."], tags: [5] },
-    { esteira: "Tráfego", titulo: "Testar público de interesse amplo (ALE)", dono: P.helena },
-    { esteira: "Tráfego", titulo: "Pausar conjuntos com CPA acima da meta", dono: P.carla, tags: [2] },
-    { esteira: "Tráfego", titulo: "Abrir contas de anúncio reserva", dono: P.fabio },
-    { esteira: "Edição", titulo: "Criativo 07 - Produto 1 (3 versões)", dono: P.diego, subs: ["Versão 9:16", "Versão 1:1", "Legendas"], tags: [1] },
-    { esteira: "Edição", titulo: "VSL do Upsell 1 - Produto 2", dono: P.elisa, subs: ["Corte", "Trilha", "Revisão do pitch"] },
-    { esteira: "Edição", titulo: "Criativo 08 - Produto 4", dono: P.igor, tags: [1] },
-    { esteira: "Edição", titulo: "Ajustar legendas da VSL em alemão", dono: P.diego },
-    { esteira: "Edição", titulo: "Thumbnails dos vídeos da área de membros", dono: P.elisa },
-    { esteira: "Infra", titulo: "Página do Downsell 2 - Produto 1 (LATAM)", dono: P.fabio, subs: ["Montar página", "Ligar checkout", "Testar compra"] },
-    { esteira: "Infra", titulo: "Trocar o player da VSL de entrada do Produto 2", dono: P.fabio },
-    { esteira: "Infra", titulo: "Corrigir botão que não aparece no celular", dono: P.fabio, tags: [4, 2] },
-    { esteira: "Infra", titulo: "Área de membros: liberar entregável do Produto 3", dono: P.fabio },
-    { esteira: "Testes", titulo: "Teste: preço do Upsell 1 a R$ 297", dono: P.ana, desc: ["Hipótese: subir o preço aumenta a receita por comprador.", "Medir pela conversão do upsell sobre as vendas do front."] },
-    { esteira: "Testes", titulo: "Teste: pitch mais curto na VSL de entrada", dono: P.ana },
-    { esteira: "Testes", titulo: "Teste: checkout em uma etapa", dono: P.helena },
-    { esteira: "Gestão", titulo: "Reunião de resultados do mês", dono: P.demo, subs: ["Fechar números", "Montar apresentação"], tags: [5] },
-    { esteira: "Gestão", titulo: "Contratar editor de vídeo", dono: P.demo, subs: ["Publicar vaga", "Teste prático", "Entrevistas"] },
-    { esteira: "Gestão", titulo: "Organizar férias da equipe", dono: P.ana },
-    { esteira: "Gestão", titulo: "Revisar metas do trimestre", dono: P.demo },
-    { esteira: "Copy", titulo: `${S(-1)} - PRODUTO 5 - e-mails e WhatsApp da campanha`, dono: P.bruno, tags: [0] },
-    { esteira: "Edição", titulo: "Criativo 06 - Produto 2", dono: P.diego, tags: [1] },
-    { esteira: "Tráfego", titulo: "Configurar pixel no mercado FRA", dono: P.carla },
-    { esteira: "Infra", titulo: "Migrar páginas para o novo domínio", dono: P.fabio },
-    { esteira: "Gestão", titulo: "Atualizar o manual de processos", dono: P.demo, tags: [3] },
+    { esteira: "Conteúdo", titulo: "Roteiro do webinar de lançamento do Produto 4", dono: P.bruno, desc: ["Webinar de 60 minutos, com 15 minutos de perguntas no fim.", "Usar os três casos de clientes do último trimestre."], subs: ["Estrutura dos blocos", "Slides", "Ensaio com o apresentador", "Revisão final"], tags: [0] },
+    { esteira: "Conteúdo", titulo: "Newsletter quinzenal - edição 12", dono: P.bruno, subs: ["Pauta", "Texto", "Revisão"], tags: [5] },
+    { esteira: "Conteúdo", titulo: "FAQ da página do Produto 3", dono: P.ana },
+    { esteira: "Conteúdo", titulo: "Calendário editorial de dezembro", dono: P.helena, tags: [3] },
+    { esteira: "Conteúdo", titulo: "Série de posts: bastidores da equipe", dono: P.helena, subs: ["Fotos", "Legendas", "Agendamento"] },
+    { esteira: "Conteúdo", titulo: "Revisar textos da área de membros", dono: P.bruno },
+    { esteira: "Mídia paga", titulo: "Remarketing para quem abandonou o checkout", dono: P.carla, subs: ["Públicos", "Peças", "Orçamento"], tags: [1] },
+    { esteira: "Mídia paga", titulo: "Relatório mensal de mídia", dono: P.carla, desc: ["Investimento, custo por venda e retorno por canal."], tags: [5] },
+    { esteira: "Mídia paga", titulo: "Público semelhante a compradores (1%)", dono: P.helena },
+    { esteira: "Mídia paga", titulo: "Revisar orçamento diário por canal", dono: P.carla, tags: [2] },
+    { esteira: "Mídia paga", titulo: "Integrar conversões offline do CRM", dono: P.fabio },
+    { esteira: "Design e Vídeo", titulo: "Identidade visual do Produto 4", dono: P.elisa, subs: ["Paleta", "Logotipo", "Mockups"], tags: [1] },
+    { esteira: "Design e Vídeo", titulo: "Vídeo de depoimento - cliente de São Paulo", dono: P.diego, subs: ["Decupagem", "Corte", "Legendas"] },
+    { esteira: "Design e Vídeo", titulo: "Kit de banners para parceiros", dono: P.igor, tags: [1] },
+    { esteira: "Design e Vídeo", titulo: "Vinheta de abertura do webinar", dono: P.diego },
+    { esteira: "Design e Vídeo", titulo: "Modelos de stories para o Instagram", dono: P.elisa },
+    { esteira: "Site e Checkout", titulo: "Página de obrigado com pesquisa de satisfação", dono: P.fabio, subs: ["Layout", "Formulário", "Teste de envio"] },
+    { esteira: "Site e Checkout", titulo: "Melhorar a velocidade da página do Produto 1", dono: P.fabio },
+    { esteira: "Site e Checkout", titulo: "Corrigir formulário que não envia no Safari", dono: P.fabio, tags: [4, 2] },
+    { esteira: "Site e Checkout", titulo: "Cupom de primeira compra no checkout", dono: P.fabio },
+    { esteira: "Experimentos", titulo: "Experimento: depoimentos logo no início da página", dono: P.ana, desc: ["Hipótese: mostrar prova social antes do preço aumenta a conversão.", "Medir pela taxa de compra de quem chega na página."] },
+    { esteira: "Experimentos", titulo: "Experimento: parcelamento em destaque no checkout", dono: P.ana },
+    { esteira: "Experimentos", titulo: "Experimento: página curta x página longa", dono: P.helena },
+    { esteira: "Operações", titulo: "Planejamento do primeiro trimestre", dono: P.demo, subs: ["Metas por área", "Orçamento", "Apresentação"], tags: [5] },
+    { esteira: "Operações", titulo: "Contratar analista de mídia", dono: P.demo, subs: ["Publicar vaga", "Case prático", "Entrevistas"] },
+    { esteira: "Operações", titulo: "Renovar contratos de ferramentas", dono: P.ana },
+    { esteira: "Operações", titulo: "Pesquisa de clima da equipe", dono: P.demo },
+    { esteira: "Conteúdo", titulo: "Newsletter quinzenal - edição 11", dono: P.bruno, tags: [5] },
+    { esteira: "Design e Vídeo", titulo: "Vídeo de depoimento - cliente de Curitiba", dono: P.diego },
+    { esteira: "Mídia paga", titulo: "Rastreamento de conversões no Google", dono: P.carla },
+    { esteira: "Site e Checkout", titulo: "Migrar o site para o novo servidor", dono: P.fabio },
+    { esteira: "Operações", titulo: "Fechamento financeiro do mês", dono: P.demo, tags: [3] },
   ];
 
   b.cards = [];
@@ -433,9 +434,8 @@ export function gerarBanco(): Banco {
     const criado = addDias(hoje, -r.int(3, 18));
     const prazo = etapa === "concluido" ? addDias(hoje, -r.int(1, 10)) : addDias(hoje, r.int(-3, 12));
     const concluidoEm = etapa === "concluido" ? momento(addDias(prazo, -r.int(0, 2)), 16) : null;
-    const campanha = mod.titulo.startsWith("S");
-    const inicioCard = campanha ? segunda(prazo) : r.chance(0.6) ? addDias(prazo, -r.int(1, 3)) : null;
-    const fimCard = campanha ? addDias(segunda(prazo), 6) : inicioCard ? prazo : null;
+    const inicioCard = r.chance(0.65) ? addDias(prazo, -r.int(1, 4)) : null;
+    const fimCard = inicioCard ? prazo : null;
     const id = uid(17);
     posicao[colId] = (posicao[colId] ?? 0) + 1;
     const ehMeu = mod.dono.id === P.demo.id || (i % 5 === 0 && etapa !== "concluido");
@@ -453,10 +453,10 @@ export function gerarBanco(): Banco {
     });
     if (ehMeu && mod.dono.id !== P.demo.id) b.card_assignees!.push({ card_id: id, user_id: mod.dono.id, created_at: momento(criado, 10) });
     (mod.tags ?? []).forEach((t) => b.card_tags!.push({ card_id: id, tag_id: tags[t]!.id }));
-    if (mod.esteira === "Edição" || mod.esteira === "Tráfego") {
-      b.card_field_values!.push({ id: uid(18), card_id: id, field_id: campos.plataforma.id, value: r.pick(["Facebook", "YouTube", "TikTok"]) });
+    if (mod.esteira === "Design e Vídeo" || mod.esteira === "Mídia paga" || mod.esteira === "Conteúdo") {
+      b.card_field_values!.push({ id: uid(18), card_id: id, field_id: campos.canal.id, value: r.pick(["Instagram", "YouTube", "Google", "E-mail"]) });
     }
-    if (mod.esteira !== "Gestão") b.card_field_values!.push({ id: uid(18), card_id: id, field_id: campos.lingua.id, value: r.pick(["Português", "Português", "Espanhol", "Alemão"]) });
+    if (mod.esteira !== "Operações") b.card_field_values!.push({ id: uid(18), card_id: id, field_id: campos.esforco.id, value: r.pick(["Pequeno", "Médio", "Médio", "Grande"]) });
     (mod.subs ?? []).forEach((s, si) => {
       const feito = etapa === "concluido" || (etapa !== "pendente" && si < (mod.subs!.length >> 1));
       b.card_subitems!.push({
@@ -489,10 +489,10 @@ export function gerarBanco(): Banco {
 
   // ---------- agenda ----------
   b.calendar_events = [
-    { title: "Reunião de resultados", dia: 2, cor: "#14b8a6" },
-    { title: "Gravação de VSL", dia: 4, cor: "#a855f7" },
-    { title: "Planejamento da campanha", dia: 7, cor: "#3b82f6" },
-    { title: "Entrevista - editor de vídeo", dia: 1, cor: "#f97316" },
+    { title: "Reunião semanal de prioridades", dia: 2, cor: "#14b8a6" },
+    { title: "Gravação do webinar", dia: 4, cor: "#a855f7" },
+    { title: "Retrospectiva do mês", dia: 7, cor: "#3b82f6" },
+    { title: "Entrevista - analista de mídia", dia: 1, cor: "#f97316" },
   ].map((e) => ({
     id: uid(23), title: e.title, description: null, start_at: momento(addDias(hoje, e.dia), 13), end_at: momento(addDias(hoje, e.dia), 14),
     color: e.cor, type: "event", campaign_id: null, created_by: P.demo.id, created_at: criadoBase, updated_at: criadoBase,
@@ -504,39 +504,46 @@ export function gerarBanco(): Banco {
       titulo: "Bem-vindo ao NEXUS", icone: "👋",
       conteudo: doc(
         tit("O que é o NEXUS", 1),
-        par("Plataforma interna que junta, num lugar só, as tarefas da equipe, os funis de venda, as campanhas da semana e as métricas."),
+        par("Plataforma interna que junta, num lugar só, as tarefas da equipe, os funis de venda, as campanhas e as métricas."),
         tit("Por onde começar"),
-        lista(["Minhas tarefas: o que está com você hoje.", "Esteiras: o quadro de cada área (Copy, Tráfego, Edição...).", "Funis: as ofertas por mercado, com cada etapa do funil.", "Campanhas: os resultados de e-mail e WhatsApp de cada semana."]),
+        lista(["Minhas tarefas: o que está com você hoje.", "Esteiras: o quadro de cada área (Conteúdo, Mídia paga, Design e Vídeo...).", "Funis: os produtos por mercado, com cada etapa do funil.", "Campanhas: os resultados de e-mail e WhatsApp de cada campanha."]),
         par("Esta é uma demonstração: os dados são fictícios e o que você mudar volta ao normal quando recarregar a página."),
       ),
     },
     { titulo: "Processos", icone: "📚", conteudo: doc(par("Como a equipe trabalha, passo a passo.")) },
     {
-      titulo: "Checklist da campanha semanal", icone: "✅", pai: "Processos",
+      titulo: "Como pedir uma peça para Design e Vídeo", icone: "🎬", pai: "Processos",
       conteudo: doc(
-        tit("Antes da semana começar"),
-        numerada(["Escolher o produto da semana.", "Copy prepara e-mails (nutrição de segunda a sexta, venda no fim de semana).", "Tráfego sobe os criativos novos.", "Infra confere páginas e checkouts."]),
-        tit("Durante a semana"),
-        lista(["Acompanhar aberturas e cliques todo dia.", "Ajustar horário das mensagens se a leitura cair."]),
-        tit("Depois"),
-        par("Lançar os resultados em Campanhas e comparar com as semanas anteriores."),
+        numerada(["Abra um card na esteira Design e Vídeo.", "Descreva o objetivo, o formato e onde a peça vai ser usada.", "Anexe referências e o texto final.", "Prazo mínimo: 3 dias úteis para peças novas."]),
+        par("Ajustes pequenos em peças prontas podem ser pedidos direto no card da peça."),
       ),
     },
     {
-      titulo: "Padrão de nomes de VSL", icone: "🏷️", pai: "Processos",
+      titulo: "Como publicar uma página nova", icone: "🚀", pai: "Processos",
       conteudo: doc(
-        par("Todo vídeo de venda segue o formato:"),
-        par("[PRODUTO] [TIPO] [ID] [MERCADO] [PITCH] [COPY-EDITOR]"),
-        lista(["TIPO: VSL, VSL-UP1, VSL-DOWN1...", "PITCH: segundo em que o vídeo chama para a compra.", "O botão de compra aparece 10 segundos antes do pitch."]),
+        lista(["Montar a página a partir do modelo aprovado.", "Ligar o checkout e testar uma compra com cupom de 100%.", "Conferir a página no celular.", "Avisar a equipe de Mídia paga antes de mandar visitantes."]),
       ),
     },
     {
-      titulo: "Onboarding de novos colaboradores", icone: "🧭",
-      conteudo: doc(tit("Primeira semana"), lista(["Acesso às ferramentas", "Conhecer as esteiras da sua área", "Acompanhar uma campanha do início ao fim"])),
+      titulo: "Guia da marca", icone: "🎨",
+      conteudo: doc(
+        tit("Tom de voz"),
+        par("Próximo, direto e sem jargão. Falamos com o cliente como falaríamos com um amigo que entende do assunto."),
+        tit("Cores"),
+        lista(["Roxo: cor principal.", "Verde: confirmação e sucesso.", "Cinza: textos de apoio."]),
+      ),
     },
     {
-      titulo: "Ideias de testes", icone: "💡",
-      conteudo: doc(par("Banco de hipóteses para testar nos funis."), lista(["Bônus no lugar de desconto no downsell", "Garantia estendida na página de entrada", "Depoimentos em vídeo no checkout"])),
+      titulo: "Rituais da equipe", icone: "🗓️",
+      conteudo: doc(lista(["Segunda, 9h: reunião semanal de prioridades (30 minutos).", "Quinta, 16h: revisão das peças da semana.", "Última sexta do mês: retrospectiva e resultados."])),
+    },
+    {
+      titulo: "Glossário", icone: "📖",
+      conteudo: doc(lista(["CAC: quanto custa conquistar um cliente.", "LTV: quanto um cliente gasta com a empresa ao longo do tempo.", "ROAS: receita dividida pelo investimento em anúncios.", "Ticket médio: receita dividida pelo número de pedidos."])),
+    },
+    {
+      titulo: "Ideias de experimentos", icone: "💡",
+      conteudo: doc(par("Hipóteses para testar nas páginas e no checkout."), lista(["Vídeo curto no topo da página", "Garantia de 60 dias", "Compra com um clique para quem já é cliente"])),
     },
   ];
   b.documents = [];
@@ -559,12 +566,13 @@ export function gerarBanco(): Banco {
   b.whatsapp_stats = [];
   b.sales = [];
   const DIAS = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
-  const ASSUNTOS_NUTRICAO = ["[[firstname]], você já viu isso?", "O erro que quase todo mundo comete", "Uma história rápida", "Faltam poucos dias", "Pergunta sincera, [[firstname]]"];
-  const ASSUNTOS_VENDA = ["Está no ar: condição especial", "Últimas horas, [[firstname]]"];
+  const ASSUNTOS_NUTRICAO = ["Os bastidores do nosso método", "3 erros que atrasam seus resultados", "Caso real: do zero ao primeiro resultado", "As perguntas que mais recebemos", "Amanhã tem novidade, [[firstname]]"];
+  const ASSUNTOS_VENDA = ["As inscrições estão abertas", "Última chamada, [[firstname]]"];
   const inicioSemanaAtual = segunda(hoje);
   for (let w = -8; w <= 1; w++) {
     const inicio = addDias(inicioSemanaAtual, w * 7);
-    const { ano, semana } = semanaISO(inicio);
+    const { ano } = semanaISO(inicio);
+    const numero = w + 9;
     const p = produtos[((w % 5) + 5) % 5]!;
     const iProd = produtos.indexOf(p);
     const mercadosDaSemana = vendeEm[iProd]!.slice(0, w % 2 === 0 ? 3 : 2);
@@ -574,8 +582,8 @@ export function gerarBanco(): Banco {
       const escala = br ? 1 : 0.25;
       const id = uid(25);
       b.campaigns.push({
-        id, code: `S${String(semana).padStart(2, "0")} - ${nomeProduto(p).toUpperCase()} [${m.code.toUpperCase()}]`,
-        product_name: nomeProduto(p).toUpperCase(), week_number: semana, year: ano, start_date: inicio, end_date: addDias(inicio, 6),
+        id, code: `Campanha ${numero} - ${nomeProduto(p).toUpperCase()} [${m.code.toUpperCase()}]`,
+        product_name: nomeProduto(p).toUpperCase(), week_number: numero, year: ano, start_date: inicio, end_date: addDias(inicio, 6),
         status: "active", notes: null, language_id: m.id, created_by: P.demo.id, created_at: momento(addDias(inicio, -3), 10), updated_at: momento(addDias(inicio, -3), 10),
       });
       const futura = inicio > hoje;
@@ -607,7 +615,7 @@ export function gerarBanco(): Banco {
         vendasWpp += vendasW;
         b.whatsapp_messages.push({
           id: uid(27), campaign_id: id, day_of_week: DIAS[d], sent_time: venda ? "19:00:00" : "10:30:00", phase: venda ? "sale" : "nurture",
-          message: venda ? "Está no ar! Condição especial só até domingo. Link na descrição do grupo." : "Bom dia! Hoje tem conteúdo novo no grupo, fica de olho.",
+          message: venda ? "Inscrições abertas! A condição de lançamento vale só até domingo. Link na descrição do grupo." : "Bom dia! Hoje às 20h tem aula nova aqui no grupo.",
           recipients_count: destinatarios, read_count: lidas, reactions_count: Math.round(lidas * 0.03), sales_count: vendasW, revenue: receitaW, created_at: momento(dia, 21),
         });
       }
@@ -626,7 +634,7 @@ export function gerarBanco(): Banco {
   b.editor_weekly_targets = editores.map((e) => ({ id: uid(30), editor_id: e.id, weekly_target_minutes: 60, extra_minute_rate_cents: 500, created_at: criadoBase, updated_at: criadoBase }));
   b.video_edit_entries = [];
   b.video_edit_demands = [];
-  const TITULOS_VIDEO = ["Criativo", "Corte de VSL", "Vídeo de depoimento", "Anúncio vertical"];
+  const TITULOS_VIDEO = ["Anúncio", "Corte do webinar", "Depoimento", "Reels"];
   for (let w = -6; w <= 0; w++) {
     const inicio = addDias(inicioSemanaAtual, w * 7);
     for (const e of editores) {

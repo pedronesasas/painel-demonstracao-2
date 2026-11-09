@@ -85,7 +85,7 @@ const STAGE_OPTIONS: Array<{ value: FunnelStage; label: string; description: str
 
 const STAGE_LABEL: Record<FunnelStage, string> = { FRONT: "Front", BACK: "Back-end" };
 
-// Siglas de editor do SOP de Nomenclatura de VSL v4.0 (fim do nome: [COPY-EDITOR]).
+// Quem editou o vídeo.
 const EDITOR_OPTIONS: Array<{ value: string; label: string }> = [
   { value: "J", label: "Equipe interna" },
   { value: "EX", label: "Edição externa" },
@@ -99,30 +99,13 @@ const ALL = "all";
 const NO_EDITOR = "none";
 const NO_PARENT = "none";
 
-// Lê a sigla do editor no fim da nomenclatura. Aceita a ordem nova ([R-J])
-// e a antiga ([J-R]): as siglas de copy (M, R, T) nunca coincidem com as de editor.
-function editorFromName(name: string): string | null {
-  const codes = EDITOR_OPTIONS.map((o) => o.value);
-  for (const m of name.toUpperCase().matchAll(/\[([A-Z]+)-([A-Z]+)\]/g)) {
-    if (codes.includes(m[2])) return m[2];
-    if (codes.includes(m[1])) return m[1];
-  }
+// Na demonstração o nome do vídeo é livre: tipo, parte e editor se escolhem no formulário.
+function editorFromName(_name: string): string | null {
   return null;
 }
 
-// Lê tipo, parte e segmento do token [VSL-...] da nomenclatura.
-// Ex.: "[ANJ] [VSL-FRONT-P2] [ID-04] [BR] [DINHEIRO] [PITCH 1389] [R-J]".
-function partsFromName(name: string): { type: VslType | null; part: VslPart | null; segment: string | null } {
-  const upper = name.toUpperCase();
-  const t = upper.match(/\[VSL-(FRONT|BACK|UP1|UP2|UP3|DOWN1|DOWN2)(?:-(P1|P2))?\]/);
-  if (!t) return { type: null, part: null, segment: null };
-  const part = (t[2] as VslPart | undefined) ?? null;
-  let segment: string | null = null;
-  if (part) {
-    const s = upper.match(/\[VSL-(?:FRONT|BACK)-P[12]\]\s*\[ID-[^\]]+\]\s*\[[^\]]+\]\s*\[([^\]]+)\]/);
-    if (s && !s[1].startsWith("PITCH")) segment = s[1];
-  }
-  return { type: t[1] as VslType, part, segment };
+function partsFromName(_name: string): { type: VslType | null; part: VslPart | null; segment: string | null } {
+  return { type: null, part: null, segment: null };
 }
 
 function funnelKey(v: Pick<Vsl, "product_id" | "language_id" | "funnel_stage">) {
@@ -842,8 +825,8 @@ function VslDialog({
             value={name}
             onChange={(e) => handleNameChange(e.target.value)}
             placeholder={isPart
-              ? "[ANJ] [VSL-FRONT-P2] [ID-04] [BR] [DINHEIRO] [PITCH 1389] [R-J]"
-              : "[ANJ] [VSL-FRONT] [ID-01] [BR] [PITCH 1099] [R-J]"}
+              ? "Produto 1 · Vídeo de vendas (parte 2) · BR · v1"
+              : "Produto 1 · Vídeo de vendas · BR · anúncios · v1"}
             required
             maxLength={200}
             className="font-mono"
@@ -983,7 +966,7 @@ function VslDialog({
                 <SelectItem value={NO_EDITOR}>Não informado</SelectItem>
               </SelectContent>
             </Select>
-            <p className="text-xs text-muted-foreground">Preenchido pela nomenclatura quando ela termina em [R-J], [M-EX] etc.</p>
+            <p className="text-xs text-muted-foreground">Quem editou o vídeo.</p>
           </div>
           <div className="space-y-2">
             <Label>Pitch Time (segundos)</Label>

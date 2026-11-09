@@ -51,7 +51,7 @@ export function CampaignGroupsView({ groups, langById, highlightLangId }: ViewPr
   const [showAllUpcoming, setShowAllUpcoming] = useState(false);
 
   // Destaque do topo: em andamento + futuras (pela data de início).
-  // "Demais semanas": encerradas e sem datas, da mais recente para a mais antiga. As futuras ficam
+  // "Demais campanhas": encerradas e sem datas, da mais recente para a mais antiga. As futuras ficam
   // fora daqui, senão semanas cadastradas com antecedência empurrariam as recentes para baixo.
   const { running, upcoming, rest } = useMemo(() => {
     return {
@@ -111,7 +111,7 @@ export function CampaignGroupsView({ groups, langById, highlightLangId }: ViewPr
         <section className="space-y-3">
           {current.length > 0 && (
             <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              Demais semanas
+              Demais campanhas
             </h2>
           )}
           <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
@@ -197,7 +197,7 @@ export function CampaignGroupCard({
             </Link>
           )}
           <div className="mt-0.5 text-xs text-muted-foreground">
-            {period ?? `Semana ${group.week} / ${group.year}`}
+            {period ?? `Campanha ${group.week} / ${group.year}`}
           </div>
         </div>
         <Badge variant={TIMING_BADGE[group.timing]} className="shrink-0">

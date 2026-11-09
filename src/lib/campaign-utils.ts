@@ -37,13 +37,13 @@ export function formatCurrency(v: number, currency = "BRL", locale?: string): st
 }
 
 export function formatCampaignCode(week: number): string {
-  return `S${String(week).padStart(2, "0")}`;
+  return `Campanha ${week}`;
 }
 
 /**
- * Código completo da campanha: `S01 - PRODUTO [MERCADO]`.
+ * Código completo da campanha: `Campanha 1 - PRODUTO [MERCADO]`.
  * Inclui o mercado para que a constraint UNIQUE(code, year) permita a
- * mesma semana/produto em mercados diferentes.
+ * mesma campanha/produto em mercados diferentes.
  */
 export function buildCampaignCode(
   week: number,
@@ -86,7 +86,7 @@ const EMAIL_FIELD_ALIASES: Record<string, string[]> = {
 
 /**
  * Extracts the real send date from a message name like
- * "S25 - BRASIL - 20/06/2026 - 11H". Returns null if no DD/MM/AAAA found.
+ * "Campanha 3 - BRASIL - 20/06/2026 - 11H". Returns null if no DD/MM/AAAA found.
  */
 export function parseDateFromMessageName(name: unknown): Date | null {
   if (!name) return null;

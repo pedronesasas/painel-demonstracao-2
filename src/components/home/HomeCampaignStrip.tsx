@@ -10,9 +10,9 @@ function dayMonthBR(iso: string | null): string {
   return d && m ? `${d}/${m}` : "";
 }
 
-// "S41 - PRODUTO 3 [pt-BR]" -> "S41" (o nome do produto já vem ao lado)
+// "Campanha 4 - PRODUTO 3 [pt-BR]" -> "Campanha 4" (o nome do produto já vem ao lado)
 function weekCode(code: string): string {
-  return code.match(/^S\d+/i)?.[0] ?? code;
+  return code.match(/^Campanha \d+/i)?.[0] ?? code;
 }
 
 function periodTitle(c: CampaignLite): string | undefined {
@@ -38,7 +38,7 @@ export function HomeCampaignStrip({
       <div className="flex items-center gap-2 px-1 text-xs text-muted-foreground">
         <Megaphone className="h-3.5 w-3.5 shrink-0" />
         <span>
-          Nenhuma campanha da semana cadastrada em{" "}
+          Nenhuma campanha em andamento cadastrada em{" "}
           <Link to="/campaigns" className="font-medium text-foreground/80 underline-offset-2 hover:underline">
             Campanhas
           </Link>
@@ -69,7 +69,7 @@ export function HomeCampaignStrip({
                 className="flex items-center gap-1.5 rounded px-1.5 py-0.5 hover:bg-accent/50 transition-colors shrink-0"
                 title={periodTitle(c)}
               >
-                <span className="font-mono text-[11px] font-bold text-primary">{c.code}</span>
+                <span className="font-mono text-[11px] font-bold text-primary">{weekCode(c.code)}</span>
                 <span className="text-xs truncate max-w-[220px]">{c.product_name}</span>
               </Link>
             ))}

@@ -1,5 +1,5 @@
 // Agrupamento das campanhas por semana + produto.
-// No banco existe UMA linha de campanha por língua (S34 BR, S34 LATAM, S34 ALE...);
+// No banco existe UMA linha de campanha por língua (Campanha 3 BR, Campanha 3 LATAM, Campanha 3 ALE...);
 // aqui elas viram um "grupo" (a semana daquele produto) com várias línguas.
 // Arquivo puro: sem React, sem Supabase e sem xlsx (o campaign-utils.ts importa xlsx no topo).
 import type { Language } from "@/hooks/use-languages";
@@ -91,14 +91,14 @@ export function productSlug(name: string | null | undefined): string {
 }
 
 export function formatWeekCode(week: number): string {
-  return `S${String(week).padStart(2, "0")}`;
+  return `Campanha ${week}`;
 }
 
 export function buildGroupKey(year: number, week: number, slug: string): string {
-  return `${year}-${formatWeekCode(week)}-${slug}`;
+  return `${year}-${week}-${slug}`;
 }
 
-/** Chave do grupo: "2026-S34-produto-2". Nunca usa o texto do code (sufixos de mercado variam). */
+/** Chave do grupo: "2026-3-produto-2" (ano, número da campanha, produto). Nunca usa o texto do code (sufixos de mercado variam). */
 export function campaignGroupKey(c: Pick<CampaignLike, "year" | "week_number" | "product_name">): string {
   return buildGroupKey(c.year, c.week_number, productSlug(c.product_name));
 }
@@ -106,7 +106,7 @@ export function campaignGroupKey(c: Pick<CampaignLike, "year" | "week_number" | 
 export function parseCampaignGroupKey(
   key: string,
 ): { year: number; week: number; slug: string } | null {
-  const m = /^(\d{4})-S(\d{1,3})-([a-z0-9-]+)$/i.exec(String(key ?? "").trim());
+  const m = /^(\d{4})-S?(\d{1,3})-([a-z0-9-]+)$/i.exec(String(key ?? "").trim());
   if (!m) return null;
   const year = Number(m[1]);
   const week = Number(m[2]);
@@ -266,7 +266,7 @@ export function groupCampaigns<T extends CampaignLike>(
   });
 }
 
-/** "S34 · PRODUTO 2" */
+/** "Campanha 3 · PRODUTO 2" */
 export function groupTitle(g: Pick<CampaignGroup, "week" | "productName">): string {
   return `${formatWeekCode(g.week)} · ${g.productName.toUpperCase()}`;
 }
